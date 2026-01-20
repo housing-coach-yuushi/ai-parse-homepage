@@ -9,6 +9,8 @@ import hmac
 import hashlib
 import base64
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from linebot.v3.messaging import (
     Configuration,
     AsyncApiClient,
@@ -106,7 +108,7 @@ INTERIOR_BASE_PROMPT = """添付の建築内観パースをフォトリアルに
 元画像の輪郭線と構造はそのまま、質感だけを高精細フォトリアルに仕上げてください。"""
 
 
-@app.get("/")
+@app.get("/api/info")
 async def root():
     return {
         "status": "ok",
@@ -677,6 +679,13 @@ async def send_premium_canceled_message(user_id: str):
             )
         )
 
+
+# Mount the homepage static files at the root
+# This must be at the end to avoid overriding other routes
+if os.path.exists("homepage"):
+    app.mount("/", StaticFiles(directory="homepage", html=True), name="homepage")
+else:
+    log("Homepage directory not found, skipping mount.")
 
 if __name__ == "__main__":
     import uvicorn

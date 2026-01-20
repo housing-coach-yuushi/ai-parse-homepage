@@ -1,0 +1,16 @@
+{
+    "version": 2,
+    "name": "architecture-ai-line-bot-homepage",
+    "builds": [
+        {
+            "src": "homepage/**",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/homepage/$1"
+        }
+    ]
+}

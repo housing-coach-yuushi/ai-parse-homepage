@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Perspective Bot - 料金プラン &amp; FAQ</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&amp;family=Work+Sans:wght@400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#06c656",
+                        "primary-dark": "#05a849",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#0f2317",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#162e21",
+                        "text-main-light": "#111814",
+                        "text-main-dark": "#f0f5f2",
+                        "text-sub-light": "#4a5950",
+                        "text-sub-dark": "#aebcb4",
+                        "border-light": "#dbe6df",
+                        "border-dark": "#2a4034",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Sans JP", "Work Sans", "sans-serif"],
+                        "body": ["Noto Sans JP", "Work Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .comparison-slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .comparison-slider img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .comparison-slider .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            z-index: 10;
+            overflow: hidden;
+            border-right: 2px solid white;
+        }
+
+        .comparison-slider .overlay img {
+            max-width: none;
+            width: auto;
+        }
+
+        .comparison-slider .handle {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            cursor: ew-resize;
+            pointer-events: auto;
+        }
+
+        .comparison-slider .handle span {
+            color: #06c656;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: #334155;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark font-display min-h-screen flex flex-col overflow-x-hidden antialiased transition-colors duration-300">
+    <header
+        class="sticky top-0 z-50 w-full border-b border-border-light dark:border-border-dark bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md">
+        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <span class="material-symbols-outlined">architecture</span>
+                </div>
+                <h2 class="text-lg font-bold tracking-tight text-text-main-light dark:text-text-main-dark">AI
+                    Perspective Bot</h2>
+            </div>
+            <nav class="hidden md:flex flex-1 justify-center gap-8">
+                <a class="text-sm font-medium hover:text-primary transition-colors" href="#">機能</a>
+                <a class="text-sm font-medium hover:text-primary transition-colors" href="#pricing">料金プラン</a>
+                <a class="text-sm font-medium hover:text-primary transition-colors" href="#faq">よくある質問</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button
+                    class="hidden sm:flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-bold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/20">
+                    無料で試す
+                </button>
+                <button class="md:hidden p-2 text-text-main-light dark:text-text-main-dark">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden bg-surface-light dark:bg-surface-dark pt-12 pb-20 lg:pt-20 lg:pb-32">
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl">
+            </div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-3xl">
+            </div>
+            <div class="layout-container max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+                    <div class="flex flex-col gap-5 max-w-xl pt-4">
+                        <div
+                            class="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1 text-xs font-bold text-gray-600 dark:text-gray-300 w-fit shadow-sm">
+                            <span class="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse"></span>
+                            スマホ完結！建築パースAI
+                        </div>
+                        <h1
+                            class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-gray-900 dark:text-white leading-[1.3]">
+                            写真を送るだけで、<br />
+                            <span class="text-primary relative inline-block">
+                                プロ級のパース
+                                <svg class="absolute w-full h-3 -bottom-1 left-0 text-primary/20 fill-current"
+                                    preserveAspectRatio="none" viewBox="0 0 100 10">
+                                    <path d="M0 5 Q 50 10 100 5 L 100 10 L 0 10 Z"></path>
+                                </svg>
+                            </span>
+                            <span class="inline-block">が1分で完成</span>
+                        </h1>
+                        <div class="bg-primary/10 dark:bg-primary/5 border-l-4 border-primary p-4 rounded-r-lg">
+                            <p class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-snug">
+                                もうパソコンすら開く必要がありません。<br />その場でイメージを作成できます。
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 my-2 items-center text-center">
+                            <div class="flex flex-col items-center group">
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-white dark:bg-gray-800 shadow-sm border-2 border-gray-100 dark:border-gray-700 flex items-center justify-center mb-2 group-hover:border-primary transition-colors">
+                                    <span
+                                        class="material-symbols-outlined text-3xl text-gray-400 group-hover:text-primary">photo_camera</span>
+                                </div>
+                                <span class="text-xs font-bold text-gray-600 dark:text-gray-400">商談中に撮影</span>
+                            </div>
+                            <div class="flex justify-center relative">
+                                <span class="material-symbols-outlined text-gray-300 animate-pulse">arrow_forward</span>
+                            </div>
+                            <div class="flex flex-col items-center group">
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-[#06c656]/10 shadow-sm border-2 border-[#06c656]/20 flex items-center justify-center mb-2">
+                                    <span class="material-symbols-outlined text-3xl text-[#06c656]">send</span>
+                                </div>
+                                <span class="text-xs font-bold text-gray-600 dark:text-gray-400">LINEで受け取る</span>
+                            </div>
+                        </div>
+                        <p class="text-base text-gray-600 dark:text-gray-300 leading-relaxed">
+                            住宅営業マンや工務店向け。LINEに写真を送るだけでAIが高品質なパースを自動生成。設計・提案業務を効率化し、お客様の心を掴むプレゼンを実現します。
+                        </p>
+                        <div class="flex flex-col gap-4 pt-2">
+                            <div
+                                class="flex flex-wrap gap-x-4 gap-y-2 text-sm font-bold text-gray-700 dark:text-gray-300">
+                                <span class="flex items-center"><span
+                                        class="material-symbols-outlined text-primary text-lg mr-1">check_circle</span>月3回まで無料</span>
+                                <span class="flex items-center"><span
+                                        class="material-symbols-outlined text-primary text-lg mr-1">check_circle</span>登録30秒</span>
+                                <span class="flex items-center"><span
+                                        class="material-symbols-outlined text-primary text-lg mr-1">check_circle</span>即試せる</span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button
+                                    class="flex items-center justify-center rounded-xl bg-[#06c656] hover:bg-[#05b04d] text-white h-14 px-8 text-base font-bold shadow-lg shadow-green-500/30 transition-all hover:-translate-y-0.5 active:translate-y-0">
+                                    <span class="material-symbols-outlined mr-2">chat</span>
+                                    LINEで受け取る
+                                </button>
+                                <button
+                                    class="flex items-center justify-center rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white h-14 px-8 text-base font-bold transition-all">
+                                    <span class="material-symbols-outlined mr-2">play_circle</span>
+                                    デモ動画を見る
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mt-2">
+                            <div class="flex -space-x-2">
+                                <div
+                                    class="h-8 w-8 rounded-full border-2 border-white dark:border-gray-800 bg-gray-200 overflow-hidden">
+                                    <img alt="User" class="h-full w-full object-cover"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA00w6QGJ28KQ-5YaNMg7N0rBD6xyJr9vcLXxAhXazMFW_9jCSu2asZJwjRraYqZAFKNJnzEH3EqMfdXj7XEgqiYaWC0QPSsiy5GcpveXNvxU1GYL6QHCvzl2_WiScPhK3eAWxQA2vUjst6GbRHDfb1XaLO_zEToYQ_otS5WN21Sl9d-_obDA5j3uHAUXfm6DM0bvk8QAbOmAlw_IaSFgIy-VMFBgDnkyjXPB0O0xIyIZ083JRCb78EwLdi6c3gj043TDQJmvwaUUc_" />
+                                </div>
+                                <div
+                                    class="h-8 w-8 rounded-full border-2 border-white dark:border-gray-800 bg-gray-200 overflow-hidden">
+                                    <img alt="User" class="h-full w-full object-cover"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVbYUf_FvppS9SaVgTbz9QQ0Qio6mPOZ02Y93GXtE3mZr4InGkGoZE2LWsTsP7eCPJ5DkqCy4VGGLCRBX0Ilw0RvDHISOPPyneqqq0cNz_vlMIVbgJJdTeBnOy5mir8ziEJYE9uibeiZGz9Bs-do_l6JvwYTltFLirJzPO1nwNnIHSbgZjfRYwCqvykDrrcViG9Ha1RZKrGHJhD3vK9dHjFn1zBq98QmacjYgS1K26HMFoIH-YwQvFfEQkSWXaa3rdz2DcVSQBZk_l" />
+                                </div>
+                                <div
+                                    class="h-8 w-8 rounded-full border-2 border-white dark:border-gray-800 bg-gray-200 overflow-hidden">
+                                    <img alt="User" class="h-full w-full object-cover"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAE0z2IptGHECf9OC7dUwe-f0-xlPllJ1X2HhT5TCrSvmY0KGDabS_oZLX-DUQl5zzeTSKbbwlC5edA-drePiYXwmOkLaqhoniGchogU2Y_KnagMT3KfU2VYyVqkb0OJbTt6rOnXyiii2UU0-haIKOZdbzYzKjWrlvSf_6joBdcZElGHnZdQ94dojCoa97JkvyuLqoK4UMBdm3E7PrTaM0O8-bE4nK3wi8L6br6pnlEL4o63f0K4u5b7_Fw0BUVRecKdD9cV9sVAvqS" />
+                                </div>
+                            </div>
+                            <p><span class="font-bold text-gray-900 dark:text-white">全国のトップセールス・マネージャー監修</span>　すでに<span
+                                    class="font-bold text-gray-900 dark:text-white">100名以上</span>が効果を実感</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <div
+                            class="relative w-full aspect-video rounded-2xl shadow-xl overflow-hidden border-2 border-white dark:border-gray-700 group">
+                            <div
+                                class="absolute top-4 left-4 z-30 bg-black/70 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full border border-white/20">
+                                2. 内観パース (Interior)
+                            </div>
+                            <div class="comparison-slider">
+                                <img alt="Interior After" src="images/interior_after.png"
+                                    class="pointer-events-none select-none" />
+                                <div
+                                    class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full z-20">
+                                    After</div>
+                                <div class="overlay w-[50%] transition-[width] duration-300 ease-out">
+                                    <img alt="Interior Before" src="images/interior_before.jpg"
+                                        class="pointer-events-none select-none" />
+                                    <div
+                                        class="absolute bottom-3 left-3 bg-white/80 dark:bg-black/60 backdrop-blur-sm text-gray-900 dark:text-white text-[10px] font-bold px-2 py-1 rounded-full z-20">
+                                        Before</div>
+                                </div>
+                                <div class="handle left-[50%] transition-[left] duration-300 ease-out cursor-ew-resize">
+                                    <span class="material-symbols-outlined text-white text-xl">code</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div
+                                class="relative w-full aspect-[4/3] rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 group">
+                                <div
+                                    class="absolute top-3 left-3 z-30 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white/20">
+                                    1. 外観パース
+                                </div>
+                                <div class="comparison-slider small">
+                                    <img alt="Exterior After" src="images/exterior_after.jpg"
+                                        class="pointer-events-none select-none" />
+                                    <div class="overlay w-[60%] transition-[width] duration-300 ease-out">
+                                        <img alt="Exterior Before" src="images/exterior_before.jpg"
+                                            class="pointer-events-none select-none" />
+                                    </div>
+                                    <div
+                                        class="handle left-[60%] transition-[left] duration-300 ease-out cursor-ew-resize">
+                                        <span class="material-symbols-outlined text-white text-sm">code</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="relative w-full aspect-[4/3] rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 group">
+                                <div
+                                    class="absolute top-3 left-3 z-30 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white/20">
+                                    3. 間取り図変換
+                                </div>
+                                <div class="comparison-slider small">
+                                    <img alt="3D Plan After" src="images/plan_after.png"
+                                        class="pointer-events-none select-none" />
+                                    <div class="overlay w-[40%] transition-[width] duration-300 ease-out">
+                                        <img alt="2D Plan Before" src="images/plan_before.jpg"
+                                            class="pointer-events-none select-none" />
+                                    </div>
+                                    <div
+                                        class="handle left-[40%] transition-[left] duration-300 ease-out cursor-ew-resize">
+                                        <span class="material-symbols-outlined text-white text-sm">code</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <div
+                                class="inline-flex items-center gap-2 bg-white dark:bg-gray-800 py-2 px-4 rounded-lg shadow border border-gray-100 dark:border-gray-700">
+                                <div class="bg-green-100 dark:bg-green-900/30 p-1 rounded text-primary">
+                                    <span class="material-symbols-outlined text-lg">timer</span>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] text-gray-500 dark:text-gray-400">生成時間</div>
+                                    <div class="text-xs font-bold text-gray-900 dark:text-white">平均45秒</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section class="bg-gray-50 dark:bg-[#15231c] py-24 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180">
+                <svg class="relative block w-[calc(140%+1.3px)] h-[60px] text-surface-light dark:text-surface-dark fill-current"
+                    data-name="Layer 1" preserveAspectRatio="none" viewBox="0 0 1200 120"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1200 120L0 16.48 0 0 1200 0 1200 120z"></path>
+                </svg>
+            </div>
+            <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="flex flex-col items-center mb-16 text-center">
+                    <div
+                        class="inline-block px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs font-bold tracking-wider mb-6 uppercase">
+                        Problem
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
+                        こんな悩みありませんか？
+                    </h2>
+                    <div class="w-20 h-1 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-20">
+                    <div
+                        class="bg-white dark:bg-surface-dark p-8 lg:p-10 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center min-h-[240px] relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                        <div
+                            class="absolute top-0 left-0 w-2 h-full bg-gray-200 dark:bg-gray-700 group-hover:bg-gray-400 transition-colors duration-300">
+                        </div>
+                        <span
+                            class="text-6xl font-black text-gray-100 dark:text-gray-800 absolute -right-4 -bottom-8 select-none z-0">01</span>
+                        <div class="relative z-10">
+                            <h3 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white leading-relaxed">
+                                外観や内観パースを<br />作る<span
+                                    class="relative inline-block z-10 after:content-[''] after:absolute after:bottom-1 after:left-0 after:w-full after:h-3 after:bg-gray-200 dark:after:bg-gray-700/50 after:-z-10">時間がない</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-surface-dark p-8 lg:p-10 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center min-h-[240px] relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                        <div
+                            class="absolute top-0 left-0 w-2 h-full bg-gray-200 dark:bg-gray-700 group-hover:bg-gray-400 transition-colors duration-300">
+                        </div>
+                        <span
+                            class="text-6xl font-black text-gray-100 dark:text-gray-800 absolute -right-4 -bottom-8 select-none z-0">02</span>
+                        <div class="relative z-10">
+                            <h3 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white leading-relaxed">
+                                設計部門が遅い・<br />平面図しか<span
+                                    class="relative inline-block z-10 after:content-[''] after:absolute after:bottom-1 after:left-0 after:w-full after:h-3 after:bg-gray-200 dark:after:bg-gray-700/50 after:-z-10">出てこない</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-surface-dark p-8 lg:p-10 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-center min-h-[240px] relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                        <div
+                            class="absolute top-0 left-0 w-2 h-full bg-gray-200 dark:bg-gray-700 group-hover:bg-gray-400 transition-colors duration-300">
+                        </div>
+                        <span
+                            class="text-6xl font-black text-gray-100 dark:text-gray-800 absolute -right-4 -bottom-8 select-none z-0">03</span>
+                        <div class="relative z-10">
+                            <h3 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white leading-relaxed">
+                                複数のパースを<br />顧客に<span
+                                    class="relative inline-block z-10 after:content-[''] after:absolute after:bottom-1 after:left-0 after:w-full after:h-3 after:bg-gray-200 dark:after:bg-gray-700/50 after:-z-10">提案したい</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <div class="mb-8 animate-bounce">
+                        <span
+                            class="material-symbols-outlined text-4xl text-primary/50">keyboard_double_arrow_down</span>
+                    </div>
+                    <div class="relative text-center max-w-4xl mx-auto px-4">
+                        <h3
+                            class="text-3xl sm:text-4xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+                            その悩み、<br class="sm:hidden" /><span class="text-primary inline-block">1分</span>で解決させます
+                        </h3>
+                        <p class="mt-6 text-lg sm:text-xl text-gray-600 dark:text-gray-400">
+                            専門知識もハイスペックPCも不要。<br class="sm:hidden" />LINEで写真を送るだけで完了します。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage Section (Steps) -->
+        <section class="w-full px-6 py-16 md:py-24 bg-background-light dark:bg-background-dark">
+            <div class="mx-auto flex max-w-6xl flex-col items-center">
+                <div class="mb-16 text-center max-w-3xl">
+                    <h1
+                        class="mb-6 text-4xl font-black leading-tight tracking-tight text-[#111814] dark:text-white md:text-5xl lg:text-6xl">
+                        パース作成は <br class="hidden md:block" />
+                        <span class="text-primary relative inline-block">
+                            たった3ステップで完成
+                            <svg class="absolute w-full h-3 -bottom-1 left-0 text-primary/20" preserveAspectRatio="none"
+                                viewBox="0 0 100 10">
+                                <path d="M0 5 Q 50 10 100 5" fill="none" stroke="currentColor" stroke-width="8"></path>
+                            </svg>
+                        </span>
+                    </h1>
+                    <p class="text-lg text-gray-600 dark:text-gray-300 md:text-xl leading-relaxed">
+                        手書きのスケッチや現地の写真を、一瞬で高品質なパースに変換。<br class="hidden md:block" />
+                        住宅営業マン、建築家、デザイナーのために設計されました。
+                    </p>
+                </div>
+                <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-3">
+                    <!-- Step 1 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-soft hover:shadow-xl transition-all duration-300">
+                        <div
+                            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="flex h-64 w-full items-center justify-center bg-[#f4f6f5] dark:bg-[#15251d] relative overflow-hidden">
+                            <img src="images/step1_photo.png" class="w-full h-full object-cover object-center"
+                                alt="Taking photo of architectural sketch" />
+                        </div>
+                        <div class="flex flex-1 flex-col p-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span
+                                    class="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">1</span>
+                                <h3 class="text-lg font-bold text-[#111814] dark:text-white">写真を撮影・データを準備</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
+                                スマートフォンで現場を撮影するか、手書きのスケッチや図面データを用意してください。</p>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-soft hover:shadow-xl transition-all duration-300 delay-75">
+                        <div
+                            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="flex h-64 w-full items-center justify-center bg-[#f4f6f5] dark:bg-[#15251d] relative overflow-hidden">
+                            <img src="images/real_mockup_chat.png" class="w-full h-full object-cover object-top"
+                                alt="Chat UI with Send Photo" />
+                        </div>
+                        <div class="flex flex-1 flex-col p-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span
+                                    class="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">2</span>
+                                <h3 class="text-lg font-bold text-[#111814] dark:text-white">写真を送る</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                                物件の写真やラフスケッチをチャットで送信。建築現場の写真や古い外観写真でも対応可能です。</p>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-soft hover:shadow-xl transition-all duration-300 delay-150">
+                        <div
+                            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="flex h-64 w-full items-center justify-center bg-[#f4f6f5] dark:bg-[#15251d] relative overflow-hidden">
+                            <img src="images/real_mockup_results.png" class="w-full h-full object-cover object-top"
+                                alt="4 Perspectives Results" />
+                        </div>
+                        <div class="flex flex-1 flex-col p-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span
+                                    class="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">3</span>
+                                <h3 class="text-lg font-bold text-[#111814] dark:text-white">1分で4枚のパースが届く</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                                AIが生成した4パターンの高品質なパースが1分以内に届きます。そのまま顧客への提案に使えます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="w-full bg-white dark:bg-[#121f18] py-20 px-6">
+            <div class="mx-auto flex max-w-6xl flex-col">
+                <div
+                    class="mb-12 flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end border-b border-gray-100 dark:border-gray-800 pb-6">
+                    <div>
+                        <h2 class="text-3xl font-bold tracking-tight text-[#111814] dark:text-white">実例ギャラリー</h2>
+                        <p class="mt-2 text-gray-500 dark:text-gray-400">AIが生成した高品質なパースの数々をご覧ください。</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+                    <!-- Gallery Item 1 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-all duration-300 hover:shadow-xl cursor-pointer">
+                        <div class="relative aspect-square w-full overflow-hidden">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                data-alt="AI Perspective Example 1"
+                                style="background-image: url('images/gallery/gallery_1.png');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                <span class="material-symbols-outlined text-sm">open_in_full</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 2 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-all duration-300 hover:shadow-xl cursor-pointer">
+                        <div class="relative aspect-square w-full overflow-hidden">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                data-alt="AI Perspective Example 2"
+                                style="background-image: url('images/gallery/gallery_2.png');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                <span class="material-symbols-outlined text-sm">open_in_full</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 3 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-all duration-300 hover:shadow-xl cursor-pointer">
+                        <div class="relative aspect-square w-full overflow-hidden">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                data-alt="AI Perspective Example 3"
+                                style="background-image: url('images/gallery/gallery_3.png');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                <span class="material-symbols-outlined text-sm">open_in_full</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 4 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-all duration-300 hover:shadow-xl cursor-pointer">
+                        <div class="relative aspect-square w-full overflow-hidden">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                data-alt="AI Perspective Example 4"
+                                style="background-image: url('images/gallery/gallery_4.png');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                <span class="material-symbols-outlined text-sm">open_in_full</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 5 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-all duration-300 hover:shadow-xl cursor-pointer">
+                        <div class="relative aspect-square w-full overflow-hidden">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                data-alt="AI Perspective Example 5"
+                                style="background-image: url('images/gallery/gallery_5.png');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                <span class="material-symbols-outlined text-sm">open_in_full</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 6 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-all duration-300 hover:shadow-xl cursor-pointer">
+                        <div class="relative aspect-square w-full overflow-hidden">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                data-alt="AI Perspective Example 6"
+                                style="background-image: url('images/gallery/gallery_6.png');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                <span class="material-symbols-outlined text-sm">open_in_full</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 7 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-all duration-300 hover:shadow-xl cursor-pointer">
+                        <div class="relative aspect-square w-full overflow-hidden">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                data-alt="AI Perspective Example 7"
+                                style="background-image: url('images/gallery/gallery_7.png');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                <span class="material-symbols-outlined text-sm">open_in_full</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gallery Item 8 -->
+                    <div
+                        class="group relative flex flex-col overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 shadow-sm transition-all duration-300 hover:shadow-xl cursor-pointer">
+                        <div class="relative aspect-square w-full overflow-hidden">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                data-alt="AI Perspective Example 8"
+                                style="background-image: url('images/gallery/gallery_8.png');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            </div>
+                            <div
+                                class="absolute top-4 right-4 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                <span class="material-symbols-outlined text-sm">open_in_full</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 flex justify-center">
+                    <button
+                        class="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary-dark transition-colors">
+                        すべての事例を見る
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="w-full py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="pricing">
+            <div class="flex flex-col items-center text-center mb-12">
+                <h2
+                    class="text-3xl md:text-4xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark mb-4">
+                    シンプルで透明性のある料金体系
+                </h2>
+                <p class="text-text-sub-light dark:text-text-sub-dark max-w-2xl text-lg">
+                    建築パースの作成を数秒でスタート。商用利用やより高度な機能が必要な場合は、プレミアムプランをご利用ください。
+                </p>
+            </div>
+            <div class="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12 items-start">
+                <div
+                    class="relative flex flex-col overflow-hidden rounded-2xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-8 shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md h-full">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">無料プラン</h3>
+                        <p class="mt-2 text-text-sub-light dark:text-text-sub-dark text-sm">お試しや趣味でのご利用に最適</p>
+                        <div class="mt-6 flex items-baseline gap-1">
+                            <span
+                                class="text-4xl font-black tracking-tight text-text-main-light dark:text-text-main-dark">無料</span>
+                        </div>
+                        <div
+                            class="mt-2 text-sm font-medium text-text-sub-light dark:text-text-sub-dark bg-background-light dark:bg-background-dark inline-block px-2 py-1 rounded">
+                            標準スピード
+                        </div>
+                    </div>
+                    <ul class="mb-8 flex flex-col gap-4 text-sm text-text-main-light dark:text-text-main-dark flex-1">
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="material-symbols-outlined text-primary shrink-0 text-[20px]">check_circle</span>
+                            <span>毎月 3回まで生成</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="material-symbols-outlined text-primary shrink-0 text-[20px]">check_circle</span>
+                            <span>標準解像度</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="material-symbols-outlined text-primary shrink-0 text-[20px]">check_circle</span>
+                            <span>商用利用可能</span>
+                        </li>
+                    </ul>
+                    <button
+                        class="h-12 w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-sm font-bold text-text-main-light dark:text-text-main-dark transition-colors hover:bg-border-light dark:hover:bg-border-dark">
+                        無料で試す
+                    </button>
+                </div>
+                <div
+                    class="relative flex flex-col overflow-hidden rounded-2xl border-2 border-primary bg-surface-light dark:bg-surface-dark p-8 shadow-xl shadow-primary/5 transition-transform hover:-translate-y-1 h-full">
+                    <div
+                        class="absolute right-0 top-0 rounded-bl-xl bg-primary px-4 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                        一番人気
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">プレミアム</h3>
+                        <p class="mt-2 text-text-sub-light dark:text-text-sub-dark text-sm">プロの建築家・不動産業者向け</p>
+                        <div class="mt-6 flex items-baseline gap-1">
+                            <span
+                                class="text-4xl font-black tracking-tight text-text-main-light dark:text-text-main-dark">¥1,980</span>
+                            <span class="text-base font-bold text-text-sub-light dark:text-text-sub-dark">/月</span>
+                        </div>
+                        <div class="mt-2 text-sm font-bold text-primary bg-primary/10 inline-block px-2 py-1 rounded">
+                            1回あたり約132円
+                        </div>
+                    </div>
+                    <ul class="mb-8 flex flex-col gap-4 text-sm text-text-main-light dark:text-text-main-dark flex-1">
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="material-symbols-outlined text-primary shrink-0 text-[20px]">check_circle</span>
+                            <span class="font-medium">毎月 15回まで生成</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="material-symbols-outlined text-primary shrink-0 text-[20px]">check_circle</span>
+                            <span>高解像度出力</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="material-symbols-outlined text-primary shrink-0 text-[20px]">check_circle</span>
+                            <span>商用利用可能</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-primary shrink-0 text-[20px]">bolt</span>
+                            <span class="font-medium text-primary">優先処理（高速生成）</span>
+                        </li>
+                    </ul>
+                    <button
+                        class="h-12 w-full rounded-lg bg-primary text-sm font-bold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25">
+                        今すぐ申し込む
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section
+            class="w-full py-20 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto bg-surface-light dark:bg-surface-dark rounded-3xl mb-20 shadow-sm border border-border-light dark:border-border-dark"
+            id="faq">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">
+                    よくある質問
+                </h2>
+            </div>
+            <div class="flex flex-col gap-4">
+                <details class="group border-b border-border-light dark:border-border-dark pb-4">
+                    <summary
+                        class="flex cursor-pointer items-center justify-between gap-4 py-3 text-lg font-medium text-text-main-light dark:text-text-main-dark transition-colors hover:text-primary list-none">
+                        <span>商用利用できますか？</span>
+                        <span
+                            class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180 text-text-sub-light dark:text-text-sub-dark">expand_more</span>
+                    </summary>
+                    <div class="mt-2 text-text-sub-light dark:text-text-sub-dark leading-relaxed">
+                        はい！無料プラン・プレミアムプラン問わず、商用利用権が含まれています。追加料金なしで、クライアントへの提案資料、マーケティング資料、SNSなどに生成されたパースをご利用いただけます。
+                    </div>
+                </details>
+                <details class="group border-b border-border-light dark:border-border-dark pb-4">
+                    <summary
+                        class="flex cursor-pointer items-center justify-between gap-4 py-3 text-lg font-medium text-text-main-light dark:text-text-main-dark transition-colors hover:text-primary list-none">
+                        <span>生成にはどのくらい時間がかかりますか？</span>
+                        <span
+                            class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180 text-text-sub-light dark:text-text-sub-dark">expand_more</span>
+                    </summary>
+                    <div class="mt-2 text-text-sub-light dark:text-text-sub-dark leading-relaxed">
+                        通常、生成には30〜60秒ほどかかります。プレミアムプランのユーザーは優先処理が適用され、混雑時でも待ち時間が短縮され、優先的に生成されます。
+                    </div>
+                </details>
+                <details class="group border-b border-border-light dark:border-border-dark pb-4">
+                    <summary
+                        class="flex cursor-pointer items-center justify-between gap-4 py-3 text-lg font-medium text-text-main-light dark:text-text-main-dark transition-colors hover:text-primary list-none">
+                        <span>いつでもキャンセルできますか？</span>
+                        <span
+                            class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180 text-text-sub-light dark:text-text-sub-dark">expand_more</span>
+                    </summary>
+                    <div class="mt-2 text-text-sub-light dark:text-text-sub-dark leading-relaxed">
+                        もちろんです。LINEメニューからいつでもサブスクリプションの管理・解約が可能です。長期契約の縛りや解約手数料は一切ありません。
+                    </div>
+                </details>
+                <details class="group pb-4">
+                    <summary
+                        class="flex cursor-pointer items-center justify-between gap-4 py-3 text-lg font-medium text-text-main-light dark:text-text-main-dark transition-colors hover:text-primary list-none">
+                        <span>納品されるファイル形式は何ですか？</span>
+                        <span
+                            class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180 text-text-sub-light dark:text-text-sub-dark">expand_more</span>
+                    </summary>
+                    <div class="mt-2 text-text-sub-light dark:text-text-sub-dark leading-relaxed">
+                        画像は高品質なPNGまたはJPG形式で提供され、ほとんどのデザインソフトやWebでの利用に適しています。
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section
+            class="w-full bg-surface-light dark:bg-surface-dark py-24 border-t border-border-light dark:border-border-dark">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div
+                    class="bg-background-light dark:bg-background-dark rounded-3xl p-8 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12 relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none">
+                    </div>
+                    <div class="flex flex-col gap-6 max-w-xl z-10 text-center md:text-left">
+                        <h2
+                            class="text-3xl md:text-5xl font-black tracking-tight text-text-main-light dark:text-text-main-dark">
+                            まずは無料で試してみませんか？
+                        </h2>
+                        <p class="text-lg text-text-sub-light dark:text-text-sub-dark">
+                            多くの建築家や不動産のプロが、パース作成の時間を大幅に削減しています。LINEで今すぐ始められます。
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                            <button
+                                class="group relative flex h-14 items-center justify-center gap-3 overflow-hidden rounded-xl bg-primary px-8 text-base font-bold text-white transition-all hover:bg-primary-dark hover:shadow-xl hover:shadow-primary/20">
+                                <span class="material-symbols-outlined text-[24px]">chat_bubble</span>
+                                <span>LINEで友だち追加</span>
+                                <div
+                                    class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:animate-[shimmer_1.5s_infinite]">
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="relative z-10 shrink-0">
+                        <div class="bg-white p-4 rounded-xl shadow-lg border border-border-light">
+                            <div class="w-48 h-48 bg-white rounded-lg overflow-hidden relative">
+                                <img alt="QR code to add AI Perspective Bot on LINE"
+                                    class="w-full h-full object-contain"
+                                    data-alt="Black and white QR code pattern for scanning" src="images/line_qr.png" />
+                            </div>
+                            <p
+                                class="text-center text-xs font-medium text-text-sub-light mt-3 uppercase tracking-wider">
+                                スマホでスキャン</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="w-full py-8 text-center text-sm text-text-sub-light dark:text-text-sub-dark">
+            <div class="max-w-7xl mx-auto px-4 border-t border-border-light dark:border-border-dark pt-8">
+                <p>© 2023 AI Perspective Bot. All rights reserved.</p>
+                <div class="flex flex-wrap justify-center gap-6 mt-4">
+                    <a class="hover:text-primary transition-colors" href="tokusho.html">特定商取引法に基づく表記</a>
+                    <a class="hover:text-primary transition-colors" href="privacy.html">プライバシーポリシー</a>
+                    <a class="hover:text-primary transition-colors" href="terms.html">利用規約</a>
+                    <a class="hover:text-primary transition-colors" href="#">お問い合わせ</a>
+                </div>
+            </div>
+        </footer>
+        <script src="script.js"></script>
+</body>
+
+</html>
