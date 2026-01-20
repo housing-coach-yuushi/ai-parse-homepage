@@ -3,6 +3,7 @@ LINE Bot for AI Architectural Rendering
 住宅営業マン向けAIパース生成LINEボット
 """
 import os
+import sys
 import httpx
 import hmac
 import hashlib
@@ -36,6 +37,12 @@ user_db = UserDB()
 
 # ユーザーの状態管理（メモリ上、本番はRedis推奨）
 user_states = {}
+
+
+def log(message: str):
+    """ログ出力（標準出力を即座にフラッシュ）"""
+    log(message, flush=True)
+    sys.stdout.flush()
 
 # 外観用ベースプロンプト
 EXTERIOR_BASE_PROMPT = """添付の建築パースをフォトリアルにしてください。
@@ -112,12 +119,19 @@ async def webhook(request: Request, background_tasks: BackgroundTasks):
     body = await request.body()
     body_text = body.decode("utf-8")
 
+    log(f"=== Webhook received ===")
+    log(f"Body length: {len(body_text)}")
+
     # 署名検証
     if not validate_signature(body, signature):
+        log("ERROR: Invalid signature")
         raise HTTPException(status_code=400, detail="Invalid signature")
+
+    log("Signature validated successfully")
 
     # 非同期イベント処理
     background_tasks.add_task(handle_events_async, body_text, signature)
+    log("Background task added")
 
     return {"status": "ok"}
 
@@ -127,22 +141,27 @@ async def handle_events_async(body: str, signature: str):
     import json
     from linebot.v3.webhooks import Event
 
+    log("=== handle_events_async started ===")
+
     try:
         events_data = json.loads(body)
+        log(f"Events data parsed: {len(events_data.get('events', []))} events")
 
         for event_data in events_data.get("events", []):
             event_type = event_data.get("type")
+            log(f"Processing event type: {event_type}")
 
             if event_type == "follow":
                 await handle_follow_async(event_data)
             elif event_type == "message":
                 message_type = event_data.get("message", {}).get("type")
+                log(f"Message type: {message_type}")
                 if message_type == "image":
                     await handle_image_async(event_data)
                 elif message_type == "text":
                     await handle_text_async(event_data)
     except Exception as e:
-        print(f"Error in handle_events_async: {e}")
+        log(f"Error in handle_events_async: {e}")
         import traceback
         traceback.print_exc()
 
@@ -166,7 +185,7 @@ async def handle_image_async(event_data: dict):
         message_id = event_data["message"]["id"]
         reply_token = event_data["replyToken"]
 
-        print(f"Image received from user: {user_id}, message_id: {message_id}")
+        log(f"Image received from user: {user_id}, message_id: {message_id}")
 
         # 無料枠チェック
         remaining = user_db.get_remaining_count(user_id)
@@ -180,12 +199,12 @@ async def handle_image_async(event_data: dict):
             "status": "waiting_type"  # 内観/外観選択待ち
         }
 
-        print(f"User state updated: {user_states[user_id]}")
+        log(f"User state updated: {user_states[user_id]}")
 
         # 内観/外観選択を促す
         await send_type_selection(user_id, reply_token)
     except Exception as e:
-        print(f"Error in handle_image_async: {e}")
+        log(f"Error in handle_image_async: {e}")
         import traceback
         traceback.print_exc()
 
@@ -197,7 +216,7 @@ async def handle_text_async(event_data: dict):
         text = event_data["message"]["text"]
         reply_token = event_data["replyToken"]
 
-        print(f"Text received from user: {user_id}, text: {text}")
+        log(f"Text received from user: {user_id}, text: {text}")
 
         if user_id not in user_states:
             # 画像を送るよう促す
@@ -205,7 +224,7 @@ async def handle_text_async(event_data: dict):
             return
 
         state = user_states[user_id]
-        print(f"Current user state: {state}")
+        log(f"Current user state: {state}")
 
         # 内観/外観選択待ち
         if state.get("status") == "waiting_type":
@@ -236,13 +255,13 @@ async def handle_text_async(event_data: dict):
                 reply_token
             )
             del user_states[user_id]
-            print(f"User state deleted after generation")
+            log(f"User state deleted after generation")
             return
 
         # その他
         await send_prompt_image_message(user_id, reply_token)
     except Exception as e:
-        print(f"Error in handle_text_async: {e}")
+        log(f"Error in handle_text_async: {e}")
         import traceback
         traceback.print_exc()
 
@@ -484,7 +503,7 @@ async def process_generation(user_id: str, image_message_id: str, parse_type: st
                 )
 
         except Exception as e:
-            print(f"Generation error: {e}")
+            log(f"Generation error: {e}")
             await api.push_message(
                 PushMessageRequest(
                     to=user_id,
