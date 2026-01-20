@@ -479,23 +479,37 @@ async def send_limit_reached_message(user_id: str, reply_token: str):
     async with AsyncApiClient(configuration) as api_client:
         api = AsyncMessagingApi(api_client)
 
+        # プレミアムユーザーかチェック
+        user = user_db.get_user(user_id)
+        is_premium = user and user["is_premium"]
+
         # Stripe決済リンクを生成
         payment_url = stripe_service.create_payment_link(user_id)
         if not payment_url:
             # フォールバック: 固定URL
             payment_url = "https://buy.stripe.com/test_XXXXXX"  # Stripeダッシュボードで取得
 
+        if is_premium:
+            # プレミアムユーザーが15回使い切った場合
+            message = (
+                "今月のプレミアム枠（15回）を使い切りました。\n\n"
+                "来月1日に自動的にリセットされます。\n"
+                "引き続きご利用ありがとうございます！"
+            )
+        else:
+            # 無料ユーザーが3回使い切った場合
+            message = (
+                "今月の無料枠（3回）を使い切りました。\n\n"
+                "🌟 プレミアムプラン: 月額1,980円\n"
+                "✨ 月15回まで生成可能（1回4枚）\n"
+                "💰 コスト: 1回あたり約132円\n\n"
+                f"お申し込みはこちら:\n{payment_url}"
+            )
+
         await api.reply_message(
             ReplyMessageRequest(
                 reply_token=reply_token,
-                messages=[
-                    TextMessage(
-                        text="今月の無料枠（3回）を使い切りました。\n\n"
-                             "🌟 無制限プラン: 月額1,980円\n"
-                             "✨ 何度でも生成し放題\n\n"
-                             f"お申し込みはこちら:\n{payment_url}"
-                    )
-                ]
+                messages=[TextMessage(text=message)]
             )
         )
 
@@ -605,7 +619,8 @@ async def send_premium_activated_message(user_id: str):
                 messages=[
                     TextMessage(
                         text="🎉 プレミアムプランが有効になりました！\n\n"
-                             "これで無制限にAIパースを生成できます。\n"
+                             "✨ 月15回まで生成可能（1回4枚）\n"
+                             "📅 毎月1日に回数リセット\n\n"
                              "ご利用ありがとうございます！"
                     )
                 ]

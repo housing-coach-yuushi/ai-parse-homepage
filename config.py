@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     # 無料枠
     FREE_MONTHLY_LIMIT: int = 3
 
+    # プレミアム枠
+    PREMIUM_MONTHLY_LIMIT: int = 15
+
     # Stripe決済
     STRIPE_SECRET_KEY: str = ""
     STRIPE_PRICE_ID: str = ""  # 月額プランのPrice ID

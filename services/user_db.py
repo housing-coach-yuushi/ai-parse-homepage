@@ -126,16 +126,18 @@ class UserDB:
             self.create_user(user_id)
             user = self.get_user(user_id)
 
-        # プレミアムユーザーは無制限
+        used = self.get_monthly_usage(user_id)
+
+        # プレミアムユーザーは月15回
         if user and user["is_premium"]:
             # 有効期限チェック
             if user["premium_expires_at"]:
                 expires = datetime.fromisoformat(user["premium_expires_at"])
                 if expires > datetime.now():
-                    return 999  # 無制限を表す
+                    remaining = settings.PREMIUM_MONTHLY_LIMIT - used
+                    return max(0, remaining)
 
-        # 無料ユーザー
-        used = self.get_monthly_usage(user_id)
+        # 無料ユーザーは月3回
         remaining = settings.FREE_MONTHLY_LIMIT - used
         return max(0, remaining)
 
