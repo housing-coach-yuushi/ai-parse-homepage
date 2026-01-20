@@ -30,6 +30,15 @@ from services.stripe_service import stripe_service
 
 app = FastAPI(title="AI Parse LINE Bot")
 
+# 起動時ログ
+log("=" * 50)
+log("AI Parse LINE Bot Starting...")
+log(f"Python version: {sys.version}")
+log(f"/data exists: {os.path.exists('/data')}")
+if os.path.exists('/data'):
+    log(f"/data writable: {os.access('/data', os.W_OK)}")
+log("=" * 50)
+
 # LINE Bot設定
 configuration = Configuration(access_token=settings.LINE_CHANNEL_ACCESS_TOKEN)
 
@@ -99,7 +108,23 @@ INTERIOR_BASE_PROMPT = """添付の建築内観パースをフォトリアルに
 
 @app.get("/")
 async def root():
-    return {"status": "ok", "message": "AI Parse LINE Bot is running"}
+    return {
+        "status": "ok",
+        "message": "AI Parse LINE Bot is running",
+        "version": "2.0",
+        "data_dir_exists": os.path.exists('/data'),
+        "db_path": user_db.db_path
+    }
+
+
+@app.get("/health")
+async def health():
+    """ヘルスチェック"""
+    return {
+        "status": "healthy",
+        "database": user_db.db_path,
+        "data_writable": os.access('/data', os.W_OK) if os.path.exists('/data') else False
+    }
 
 
 @app.post("/stripe-webhook")

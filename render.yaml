@@ -13,6 +13,8 @@ services:
         sync: false
       - key: FREE_MONTHLY_LIMIT
         value: "3"
+      - key: PREMIUM_MONTHLY_LIMIT
+        value: "15"
     disk:
       name: data
       mountPath: /data
