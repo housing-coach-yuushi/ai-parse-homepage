@@ -24,6 +24,12 @@ class Settings(BaseSettings):
     # 無料枠
     FREE_MONTHLY_LIMIT: int = 3
 
+    # Stripe決済
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_PRICE_ID: str = ""  # 月額プランのPrice ID
+    STRIPE_PAYMENT_LINK_ID: str = ""  # Payment Link ID（オプション）
+    STRIPE_WEBHOOK_SECRET: str = ""
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

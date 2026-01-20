@@ -26,6 +26,7 @@ from linebot.v3.exceptions import InvalidSignatureError
 from config import settings
 from services.kie_api import generate_parse_multi
 from services.user_db import UserDB
+from services.stripe_service import stripe_service
 
 app = FastAPI(title="AI Parse LINE Bot")
 
@@ -99,6 +100,68 @@ INTERIOR_BASE_PROMPT = """添付の建築内観パースをフォトリアルに
 @app.get("/")
 async def root():
     return {"status": "ok", "message": "AI Parse LINE Bot is running"}
+
+
+@app.post("/stripe-webhook")
+async def stripe_webhook(request: Request):
+    """Stripe Webhookエンドポイント"""
+    payload = await request.body()
+    signature = request.headers.get("stripe-signature", "")
+
+    log("=== Stripe Webhook received ===")
+
+    # 署名検証
+    event = stripe_service.verify_webhook_signature(payload, signature)
+    if not event:
+        log("ERROR: Invalid Stripe signature")
+        raise HTTPException(status_code=400, detail="Invalid signature")
+
+    event_type = event['type']
+    log(f"Stripe event type: {event_type}")
+
+    # サブスクリプション作成完了
+    if event_type == 'checkout.session.completed':
+        session = event['data']['object']
+        user_id = session.get('client_reference_id') or session['metadata'].get('user_id')
+        subscription_id = session.get('subscription')
+
+        if user_id and subscription_id:
+            # サブスクリプション期間を取得
+            end_date = stripe_service.get_subscription_end_date(subscription_id)
+            if end_date:
+                # プレミアム設定
+                user_db.set_premium(user_id, end_date)
+                log(f"Premium activated for user: {user_id} until {end_date}")
+
+                # LINEで通知
+                await send_premium_activated_message(user_id)
+
+    # サブスクリプション更新
+    elif event_type == 'invoice.payment_succeeded':
+        invoice = event['data']['object']
+        subscription_id = invoice.get('subscription')
+        user_id = invoice['metadata'].get('user_id')
+
+        if subscription_id:
+            # 期間を延長
+            end_date = stripe_service.get_subscription_end_date(subscription_id)
+            if end_date and user_id:
+                user_db.set_premium(user_id, end_date)
+                log(f"Premium renewed for user: {user_id} until {end_date}")
+
+    # サブスクリプションキャンセル
+    elif event_type == 'customer.subscription.deleted':
+        subscription = event['data']['object']
+        user_id = subscription['metadata'].get('user_id')
+
+        if user_id:
+            user_db.cancel_premium(user_id)
+            log(f"Premium canceled for user: {user_id}")
+
+            # LINEで通知
+            await send_premium_canceled_message(user_id)
+
+    return {"status": "ok"}
 
 
 def validate_signature(body: bytes, signature: str) -> bool:
@@ -416,15 +479,21 @@ async def send_limit_reached_message(user_id: str, reply_token: str):
     async with AsyncApiClient(configuration) as api_client:
         api = AsyncMessagingApi(api_client)
 
+        # Stripe決済リンクを生成
+        payment_url = stripe_service.create_payment_link(user_id)
+        if not payment_url:
+            # フォールバック: 固定URL
+            payment_url = "https://buy.stripe.com/test_XXXXXX"  # Stripeダッシュボードで取得
+
         await api.reply_message(
             ReplyMessageRequest(
                 reply_token=reply_token,
                 messages=[
                     TextMessage(
                         text="今月の無料枠（3回）を使い切りました。\n\n"
-                             "無制限プラン: 月額1,980円\n"
-                             "お申し込みはこちら:\n"
-                             "https://example.com/subscribe"  # TODO: 課金ページURL
+                             "🌟 無制限プラン: 月額1,980円\n"
+                             "✨ 何度でも生成し放題\n\n"
+                             f"お申し込みはこちら:\n{payment_url}"
                     )
                 ]
             )
@@ -523,6 +592,44 @@ async def get_line_image(message_id: str) -> bytes:
         response = await client.get(url, headers=headers)
         response.raise_for_status()
         return response.content
+
+
+async def send_premium_activated_message(user_id: str):
+    """プレミアム有効化通知"""
+    async with AsyncApiClient(configuration) as api_client:
+        api = AsyncMessagingApi(api_client)
+
+        await api.push_message(
+            PushMessageRequest(
+                to=user_id,
+                messages=[
+                    TextMessage(
+                        text="🎉 プレミアムプランが有効になりました！\n\n"
+                             "これで無制限にAIパースを生成できます。\n"
+                             "ご利用ありがとうございます！"
+                    )
+                ]
+            )
+        )
+
+
+async def send_premium_canceled_message(user_id: str):
+    """プレミアムキャンセル通知"""
+    async with AsyncApiClient(configuration) as api_client:
+        api = AsyncMessagingApi(api_client)
+
+        await api.push_message(
+            PushMessageRequest(
+                to=user_id,
+                messages=[
+                    TextMessage(
+                        text="プレミアムプランが終了しました。\n\n"
+                             "引き続き月3回まで無料でご利用いただけます。\n\n"
+                             "またのご利用をお待ちしております！"
+                    )
+                ]
+            )
+        )
 
 
 if __name__ == "__main__":
