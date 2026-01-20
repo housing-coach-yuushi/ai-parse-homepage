@@ -549,7 +549,7 @@ async def process_generation(user_id: str, image_message_id: str, parse_type: st
             ReplyMessageRequest(
                 reply_token=reply_token,
                 messages=[
-                    TextMessage(text="4枚同時生成中です...1〜2分ほどお待ちください")
+                    TextMessage(text="✨ 4枚の高品質画像を生成中です...\n⏱️ 完成した画像から順次お届けします！")
                 ]
             )
         )
@@ -566,38 +566,44 @@ async def process_generation(user_id: str, image_message_id: str, parse_type: st
                 prompt = EXTERIOR_BASE_PROMPT.format(custom_prompt=custom_prompt)
                 type_name = "外観"
 
-            # KIE.AI で4枚同時生成
-            result_urls = await generate_parse_multi(image_content, prompt, count=4)
+            # 送信カウンター
+            sent_count = 0
 
-            # 成功した画像をフィルタリング
-            successful_urls = [url for url in result_urls if url is not None]
+            # 1枚完成するごとに送信するコールバック
+            async def on_image_complete(index: int, url: str):
+                nonlocal sent_count
+                sent_count += 1
+                log(f"Image {index + 1}/4 completed: {url}")
 
-            if successful_urls:
+                try:
+                    await api.push_message(
+                        PushMessageRequest(
+                            to=user_id,
+                            messages=[
+                                ImageMessage(original_content_url=url, preview_image_url=url),
+                                TextMessage(text=f"📸 {sent_count}枚目が完成しました！")
+                            ]
+                        )
+                    )
+                except Exception as e:
+                    log(f"Error sending image {index + 1}: {e}")
+
+            # KIE.AI で4枚同時生成（1枚ごとにコールバック）
+            log(f"Starting generation with prompt length: {len(prompt)}")
+            result_urls = await generate_parse_multi(image_content, prompt, count=4, callback=on_image_complete)
+
+            # 最後に完了メッセージと残り回数
+            if sent_count > 0:
                 # 使用回数をカウント
                 user_db.increment_usage(user_id)
                 remaining = user_db.get_remaining_count(user_id)
 
-                # 結果を送信（最大5メッセージまで）
-                messages = []
-                for url in successful_urls[:4]:  # 最大4枚
-                    messages.append(
-                        ImageMessage(
-                            original_content_url=url,
-                            preview_image_url=url
-                        )
-                    )
-
-                messages.append(
-                    TextMessage(
-                        text=f"完成しました！（{type_name}パース {len(successful_urls)}枚）\n\n"
-                             f"今月の残り回数: {remaining}回"
-                    )
-                )
-
                 await api.push_message(
                     PushMessageRequest(
                         to=user_id,
-                        messages=messages
+                        messages=[
+                            TextMessage(text=f"✅ すべて完成しました！({type_name}パース {sent_count}枚送信)\n\n今月の残り回数: {remaining}回")
+                        ]
                     )
                 )
             else:

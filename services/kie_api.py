@@ -267,14 +267,15 @@ async def generate_parse(image_bytes: bytes, prompt: str) -> Optional[str]:
         return None
 
 
-async def generate_parse_multi(image_bytes: bytes, prompt: str, count: int = 4) -> list[Optional[str]]:
+async def generate_parse_multi(image_bytes: bytes, prompt: str, count: int = 4, callback=None) -> list[Optional[str]]:
     """
-    画像からパースを複数枚同時生成
+    画像からパースを複数枚同時生成（1枚ごとにコールバック）
 
     Args:
         image_bytes: 画像のバイトデータ
         prompt: 生成プロンプト
         count: 生成枚数（デフォルト4枚）
+        callback: 1枚完成するごとに呼ばれる非同期関数 callback(index, url)
 
     Returns:
         生成された画像のURLリスト
@@ -297,23 +298,30 @@ async def generate_parse_multi(image_bytes: bytes, prompt: str, count: int = 4) 
             print("Image upload failed")
             return [None] * count
 
-        # 3. 4つのモデルで同時生成
+        # 3. 4つのモデルで同時生成（1枚ごとにコールバック）
+        urls = [None] * count
+
+        async def generate_with_callback(index: int, model: str):
+            """1枚生成してコールバックを呼ぶ"""
+            result = await generate_parse_single(image_url, prompt, model)
+            urls[index] = result
+
+            # コールバックがあれば即座に呼ぶ
+            if callback and result:
+                try:
+                    await callback(index, result)
+                except Exception as e:
+                    print(f"Callback error: {e}")
+
+            return result
+
+        # 全タスクを並列実行
         tasks = []
         for i in range(min(count, len(MODELS))):
             model = MODELS[i]
-            tasks.append(generate_parse_single(image_url, prompt, model))
+            tasks.append(generate_with_callback(i, model))
 
-        # 全タスクを並列実行
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-
-        # 結果を整理（例外はNoneに変換）
-        urls = []
-        for result in results:
-            if isinstance(result, Exception):
-                print(f"Task exception: {result}")
-                urls.append(None)
-            else:
-                urls.append(result)
+        await asyncio.gather(*tasks, return_exceptions=True)
 
         return urls
 
