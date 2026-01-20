@@ -41,7 +41,7 @@ user_states = {}
 
 def log(message: str):
     """ログ出力（標準出力を即座にフラッシュ）"""
-    log(message, flush=True)
+    print(message, flush=True)
     sys.stdout.flush()
 
 # 外観用ベースプロンプト

@@ -2,6 +2,7 @@
 ユーザー管理DB（SQLite）
 無料枠のカウント管理
 """
+import os
 import sqlite3
 from datetime import datetime
 from typing import Optional
@@ -9,8 +10,16 @@ from config import settings
 
 
 class UserDB:
-    def __init__(self, db_path: str = "users.db"):
+    def __init__(self, db_path: str = None):
+        # Renderの永続化ディレクトリを優先、なければカレントディレクトリ
+        if db_path is None:
+            if os.path.exists("/data"):
+                db_path = "/data/users.db"
+            else:
+                db_path = "users.db"
+
         self.db_path = db_path
+        print(f"UserDB initialized with path: {self.db_path}", flush=True)
         self._init_db()
 
     def _get_connection(self):
@@ -18,35 +27,40 @@ class UserDB:
 
     def _init_db(self):
         """テーブル初期化"""
-        conn = self._get_connection()
-        cursor = conn.cursor()
+        try:
+            conn = self._get_connection()
+            cursor = conn.cursor()
 
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                user_id TEXT PRIMARY KEY,
-                created_at TEXT,
-                is_premium INTEGER DEFAULT 0,
-                premium_expires_at TEXT
-            )
-        """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    user_id TEXT PRIMARY KEY,
+                    created_at TEXT,
+                    is_premium INTEGER DEFAULT 0,
+                    premium_expires_at TEXT
+                )
+            """)
 
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS usage (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id TEXT,
-                used_at TEXT,
-                month TEXT,
-                FOREIGN KEY (user_id) REFERENCES users(user_id)
-            )
-        """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS usage (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT,
+                    used_at TEXT,
+                    month TEXT,
+                    FOREIGN KEY (user_id) REFERENCES users(user_id)
+                )
+            """)
 
-        cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_usage_user_month
-            ON usage(user_id, month)
-        """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_usage_user_month
+                ON usage(user_id, month)
+            """)
 
-        conn.commit()
-        conn.close()
+            conn.commit()
+            conn.close()
+            print(f"Database initialized successfully at {self.db_path}", flush=True)
+        except Exception as e:
+            print(f"Database initialization error: {e}", flush=True)
+            raise
 
     def create_user(self, user_id: str) -> bool:
         """ユーザー作成"""
