@@ -15,11 +15,11 @@ class Settings(BaseSettings):
     KIEAI_API_KEY: str = ""
 
     # Database (Google Sheets or SQLite)
-    DATABASE_URL: str = "sqlite:///./users.db"
+    # DATABASE_URL: str = "sqlite:///./users.db" # No longer used
 
-    # Google Sheets（オプション）
-    GOOGLE_SHEETS_CREDENTIALS: str = ""
+    # Google Sheets
     GOOGLE_SHEETS_ID: str = ""
+    GOOGLE_SERVICE_ACCOUNT_KEY: str = "./config/service-account.json"
 
     # 無料枠
     FREE_MONTHLY_LIMIT: int = 3
